@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Студия красоты «Аclub» — Тюмень | Стрижки, окрашивания, кератин, косы</title>
 <meta name="description" content="Студия красоты «Аclub» в Тюмени: женские и мужские стрижки, сложные окрашивания, кератиновое выпрямление, ботокс волос, афрокосы и дредолоконы, вечерние причёски и макияж. Ежедневно 10:00–20:00, ул. Бориса Опрокиднева, 12. Запись в Telegram и по телефону.">
 <link rel="icon" type="image/jpeg" href="images/logo.jpg">
@@ -57,7 +57,7 @@
   --ease:cubic-bezier(.22,.9,.3,1);
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;overflow-x:hidden}
 body{
   font-family:var(--font-b);
   background:var(--bg);
@@ -65,6 +65,8 @@ body{
   line-height:1.6;
   overflow-x:hidden;
   -webkit-font-smoothing:antialiased;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
 }
 body.locked{overflow:hidden}
 img{max-width:100%;display:block}
@@ -213,7 +215,7 @@ html.menu-open .mobile-menu{transform:translateX(0);visibility:visible}
    HERO
 ============================================================ */
 .hero{
-  position:relative;min-height:100svh;
+  position:relative;min-height:100vh;min-height:100svh;
   display:flex;align-items:center;
   padding:150px 0 90px;
   overflow:hidden;
@@ -793,7 +795,11 @@ h2.sec-title .accent{font-style:italic;font-weight:600;color:var(--peony)}
   width:min(520px,100%);background:var(--bg);border-radius:28px;padding:42px 38px;
   position:relative;transform:translateY(30px) scale(.96);transition:.5s var(--ease);
   box-shadow:0 50px 110px rgba(0,0,0,.5);
-  max-height:90vh;overflow:auto;
+  max-height:90vh;overflow:auto;margin:auto;
+}
+@media (max-width:600px){
+  .modal{padding:0;align-items:flex-end}
+  .modal-card{width:100%;max-height:88vh;border-radius:24px 24px 0 0;padding:30px 22px 26px;transform:translateY(60px)}
 }
 .modal.open .modal-card{transform:none}
 .modal-close{
@@ -857,11 +863,15 @@ h2.sec-title .accent{font-style:italic;font-weight:600;color:var(--peony)}
 }
 @media (max-width:600px){
   .header{padding:14px 0}
-  .header-inner{gap:12px}
-  .header-cta .btn-sm{padding:10px 14px;font-size:.78rem}
+  .header-inner{gap:10px}
+  .header-cta .btn-sm{padding:9px 12px;font-size:.75rem;white-space:nowrap}
+  .header-cta{min-width:0}
   .logo{gap:8px}
   .logo img{width:38px;height:38px}
   .logo-name{font-size:1.15rem}
+@media (max-width:350px){
+  .logo .logo-name{display:none}
+}
   .section{padding:80px 0}
   .services-grid,.adv-grid{grid-template-columns:1fr}
   .masters-grid{grid-template-columns:repeat(2,1fr)}
@@ -949,7 +959,7 @@ h2.sec-title .accent{font-style:italic;font-weight:600;color:var(--peony)}
     </nav>
     <a href="tel:+79323213372" class="header-phone">+7 932 321-33-72</a>
     <button class="btn btn-sm header-cta magnetic" data-modal-open>Записаться</button>
-    <button class="burger" id="burger" aria-label="Открыть меню" onclick="document.documentElement.classList.toggle('menu-open')" ontouchstart="event.preventDefault();document.documentElement.classList.toggle('menu-open')"><span></span><span></span><span></span></button>
+    <button class="burger" id="burger" aria-label="Открыть меню" onclick="if(window.__mt&&Date.now()-window.__mt<500)return;window.__mt=Date.now();document.documentElement.classList.toggle('menu-open')" ontouchstart="event.preventDefault();window.__mt=Date.now();document.documentElement.classList.toggle('menu-open')"><span></span><span></span><span></span></button>
   </div>
 </header>
 <div class="menu-overlay" id="menuOverlay" onclick="document.documentElement.classList.remove('menu-open')"></div>
