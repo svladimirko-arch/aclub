@@ -11,7 +11,8 @@
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,500;1,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,500;1,600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,500;1,600&display=swap" rel="stylesheet"></noscript>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -157,7 +158,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .header-phone{font-weight:800;font-size:.95rem;white-space:nowrap;transition:color .3s}
 .header-phone:hover{color:var(--peony)}
 .header-cta{flex-shrink:0}
-.burger{display:none;width:44px;height:44px;border-radius:12px;border:1px solid var(--line);flex-direction:column;align-items:center;justify-content:center;gap:5px;background:rgba(255,255,255,.6);flex-shrink:0}
+.burger{display:none;width:44px;height:44px;border-radius:12px;border:1px solid var(--line);flex-direction:column;align-items:center;justify-content:center;gap:5px;background:rgba(255,255,255,.6);flex-shrink:0;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .burger span{width:20px;height:2px;background:var(--ink);border-radius:2px;transition:.35s var(--ease)}
 .burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 .burger.open span:nth-child(2){opacity:0}
@@ -166,14 +167,14 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   position:fixed;top:0;right:0;bottom:0;width:min(320px,86vw);z-index:99;
   background:var(--white);box-shadow:-24px 0 70px rgba(38,43,36,.35);
   padding:110px 30px 30px;display:flex;flex-direction:column;gap:6px;
-  transform:translateX(105%);transition:transform .5s var(--ease);
+  transform:translateX(105%);visibility:hidden;transition:transform .5s var(--ease),visibility .5s;
 }
 .menu-overlay{
   position:fixed;inset:0;z-index:98;background:rgba(24,27,21,.45);
   backdrop-filter:blur(3px);opacity:0;visibility:hidden;transition:.45s;
 }
 .menu-overlay.show{opacity:1;visibility:visible}
-.mobile-menu.open{transform:none}
+.mobile-menu.open{transform:translateX(0);visibility:visible}
 .mobile-menu a{font-size:1.15rem;font-weight:700;padding:12px 4px;border-bottom:1px solid var(--line)}
 .mobile-menu .btn{margin-top:22px}
 
@@ -1606,7 +1607,8 @@ function toggleMenu(force){
   mOverlay.classList.toggle('show', open);
   document.body.classList.toggle('locked', open);
 }
-burger&&burger.addEventListener('click',function(){toggleMenu()});
+burger&&burger.addEventListener('click',function(e){e.preventDefault();toggleMenu()});
+burger&&burger.addEventListener('pointerdown',function(e){if(e.pointerType!=='mouse'){e.preventDefault();toggleMenu()}});
 mOverlay&&mOverlay.addEventListener('click',function(){toggleMenu(false)});
 mMenu&&mMenu.querySelectorAll('a').forEach(function(a){
   a.addEventListener('click',function(){toggleMenu(false)});
