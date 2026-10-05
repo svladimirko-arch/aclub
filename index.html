@@ -160,9 +160,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .header-cta{flex-shrink:0}
 .burger{display:none;width:44px;height:44px;border-radius:12px;border:1px solid var(--line);flex-direction:column;align-items:center;justify-content:center;gap:5px;background:rgba(255,255,255,.6);flex-shrink:0;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .burger span{width:20px;height:2px;background:var(--ink);border-radius:2px;transition:.35s var(--ease)}
-.burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
-.burger.open span:nth-child(2){opacity:0}
-.burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.burger.open span:nth-child(1),html.menu-open .burger span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.burger.open span:nth-child(2),html.menu-open .burger span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3),html.menu-open .burger span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 .mobile-menu{
   position:fixed;top:0;right:0;bottom:0;width:min(320px,86vw);z-index:99;
   background:var(--white);box-shadow:-24px 0 70px rgba(38,43,36,.35);
@@ -173,8 +173,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   position:fixed;inset:0;z-index:98;background:rgba(24,27,21,.45);
   backdrop-filter:blur(3px);opacity:0;visibility:hidden;transition:.45s;
 }
-.menu-overlay.show{opacity:1;visibility:visible}
+html.menu-open body{overflow:hidden}
+html.menu-open .menu-overlay{opacity:1;visibility:visible}
 .mobile-menu.open{transform:translateX(0);visibility:visible}
+html.menu-open .mobile-menu{transform:translateX(0);visibility:visible}
 .mobile-menu a{font-size:1.15rem;font-weight:700;padding:12px 4px;border-bottom:1px solid var(--line)}
 .mobile-menu .btn{margin-top:22px}
 
@@ -947,16 +949,16 @@ h2.sec-title .accent{font-style:italic;font-weight:600;color:var(--peony)}
     </nav>
     <a href="tel:+79323213372" class="header-phone">+7 932 321-33-72</a>
     <button class="btn btn-sm header-cta magnetic" data-modal-open>Записаться</button>
-    <button class="burger" id="burger" aria-label="Открыть меню"><span></span><span></span><span></span></button>
+    <button class="burger" id="burger" aria-label="Открыть меню" onclick="document.documentElement.classList.toggle('menu-open')" ontouchstart="event.preventDefault();document.documentElement.classList.toggle('menu-open')"><span></span><span></span><span></span></button>
   </div>
 </header>
-<div class="menu-overlay" id="menuOverlay"></div>
+<div class="menu-overlay" id="menuOverlay" onclick="document.documentElement.classList.remove('menu-open')"></div>
 <div class="mobile-menu" id="mobileMenu">
-  <a href="#about">О студии</a>
-  <a href="#services">Услуги</a>
-  <a href="#gallery">Работы</a>
-  <a href="#action">Акция</a>
-  <a href="#contacts">Контакты</a>
+  <a href="#about" onclick="document.documentElement.classList.remove('menu-open')">О студии</a>
+  <a href="#services" onclick="document.documentElement.classList.remove('menu-open')">Услуги</a>
+  <a href="#gallery" onclick="document.documentElement.classList.remove('menu-open')">Работы</a>
+  <a href="#action" onclick="document.documentElement.classList.remove('menu-open')">Акция</a>
+  <a href="#contacts" onclick="document.documentElement.classList.remove('menu-open')">Контакты</a>
   <a href="tel:+79323213372" style="color:var(--peony)">+7 932 321-33-72</a>
   <button class="btn" data-modal-open>Записаться</button>
 </div>
@@ -1599,20 +1601,7 @@ window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
 toTop&&toTop.addEventListener('click',function(){window.scrollTo({top:0,behavior:reduceMotion?'auto':'smooth'})});
 
 /* ---------- Мобильное меню ---------- */
-var burger=document.getElementById('burger'), mMenu=document.getElementById('mobileMenu'), mOverlay=document.getElementById('menuOverlay');
-function toggleMenu(force){
-  var open = typeof force==='boolean' ? force : !mMenu.classList.contains('open');
-  burger.classList.toggle('open', open);
-  mMenu.classList.toggle('open', open);
-  mOverlay.classList.toggle('show', open);
-  document.body.classList.toggle('locked', open);
-}
-burger&&burger.addEventListener('click',function(e){e.preventDefault();toggleMenu()});
-burger&&burger.addEventListener('pointerdown',function(e){if(e.pointerType!=='mouse'){e.preventDefault();toggleMenu()}});
-mOverlay&&mOverlay.addEventListener('click',function(){toggleMenu(false)});
-mMenu&&mMenu.querySelectorAll('a').forEach(function(a){
-  a.addEventListener('click',function(){toggleMenu(false)});
-});
+/* меню: состояние на html.menu-open, обработчики — инлайн в разметке */
 
 /* ---------- Reveal при скролле ---------- */
 var io=new IntersectionObserver(function(entries){
